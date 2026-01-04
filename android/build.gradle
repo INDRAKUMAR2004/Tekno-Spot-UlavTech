@@ -1,0 +1,57 @@
+
+buildscript {
+    ext {
+        // ✅ Add these versions — required for all Android builds
+        buildToolsVersion = "35.0.0"
+        minSdkVersion = 24
+        compileSdkVersion = 35
+        targetSdkVersion = 35
+        kotlinVersion = "2.0.21"
+        ndkVersion = "27.1.12297006"
+    }
+
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://www.jitpack.io' }
+    }
+
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.7.0")
+        classpath("com.facebook.react:react-native-gradle-plugin")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
+
+        // ✅ Firebase Gradle plugin (required for @react-native-firebase modules)
+        classpath("com.google.gms:google-services:4.4.2")
+    }
+}
+
+// ✅ Define React Native Android directory properly
+def reactNativeAndroidDir = new File(
+    providers.exec {
+        workingDir(rootDir)
+        commandLine("node", "--print", "require.resolve('react-native/package.json')")
+    }.standardOutput.asText.get().trim(),
+    "../android"
+)
+
+// ✅ Repositories used by all projects
+allprojects {
+    repositories {
+        maven {
+            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+            url(reactNativeAndroidDir)
+        }
+
+        google()
+        mavenCentral()
+        maven { url 'https://www.jitpack.io' }
+
+        // ✅ Razorpay SDK repo (important for payment build)
+        maven { url 'https://maven.razorpay.com/' }
+    }
+}
+
+// ✅ Expo and React Native root project plugins
+apply plugin: "expo-root-project"
+apply plugin: "com.facebook.react.rootproject"

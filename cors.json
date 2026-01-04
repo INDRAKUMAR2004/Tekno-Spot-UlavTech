@@ -1,0 +1,12 @@
+[
+  {
+    "origin": [
+      "http://localhost:8081",
+      "https://ulavtech.web.app",
+      "https://ulavtech.firebaseapp.com"
+    ],
+    "method": ["GET", "POST", "PUT", "DELETE"],
+    "maxAgeSeconds": 3600,
+    "responseHeader": ["Content-Type", "x-goog-meta-*"]
+  }
+]
